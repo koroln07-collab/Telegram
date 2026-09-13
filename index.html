@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Telegram Survey</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎁</text></svg>">
+    <style>
+        :root {
+            --tg-bg: #17212B;
+            --tg-secondary-bg: #1E2C3A;
+            --tg-header: #242F3D;
+            --tg-text: #F5F5F5;
+            --tg-text-secondary: #7E919D;
+            --tg-accent: #5EAAEB;
+            --tg-accent-hover: #4A99D9;
+            --tg-button: #5EAAEB;
+            --tg-button-text: #FFFFFF;
+            --tg-border: #1E2C3A;
+            --tg-input-bg: #242F3D;
+            --tg-success: #4CAF50;
+            --tg-warning: #FF9800;
+            --gold: #FFD700;
+            --premium-gradient: linear-gradient(135deg, #6C5CE7, #A29BFE, #74B9FF);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--tg-bg);
+            color: var(--tg-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            background: var(--tg-bg);
+        }
+
+        /* Header */
+        .header {
+            background: var(--tg-header);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .header-logo {
+            width: 32px;
+            height: 32px;
+            margin-right: 12px;
+            background: var(--tg-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            min-height: calc(100vh - 64px);
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Welcome Page */
+        .welcome-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 104px);
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .gift-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: var(--premium-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: var(--tg-text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .prizes-preview {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .prize-card {
+            background: var(--tg-secondary-bg);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            min-width: 140px;
+            max-width: 180px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.2s;
+        }
+
+        .prize-card:hover {
+            transform: scale(1.05);
+        }
+
+        .prize-card .emoji {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .prize-card .name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .prize-card .desc {
+            font-size: 12px;
+            color: var(--tg-text-secondary);
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--tg-button);
+            color: var(--tg-button-text);
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            max-width: 320px;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: var(--tg-accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-premium {
+            background: var(--premium-gradient);
+        }
+
+        .btn-premium:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--tg-success);
+        }
+
+        .btn-success:hover {
+            background: #43A047;
+        }
+
+        /* Notification Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal {
+            background: var(--tg-secondary-bg);
+            border-radius: 20px;
+            padding: 32px 24px;
+            max-width: 340px;
+            width: 100%;
+            text-align: center;
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--tg-text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .modal .btn {
+            margin-top: 8px;
+        }
+
+        /* Survey Page */
+        .survey-header {
+            margin-bottom: 24px;
+        }
+
+        .survey-header h2 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .survey-header p {
+            color: var(--tg-text-secondary);
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            background: var(--tg-input-bg);
+            border-radius: 8px;
+            height: 8px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--tg-accent);
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .question-card {
+            background: var(--tg-secondary-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .question-number {
+            font-size: 12px;
+            color: var(--tg-accent);
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: var(--tg-input-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            border-color: var(--tg-accent);
+        }
+
+        .option.selected {
+            border-color: var(--tg-accent);
+            background: rgba(94, 170, 235, 0.15);
+        }
+
+        .option-radio {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--tg-text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-radio {
+            border-color: var(--tg-accent);
+        }
+
+        .option.selected .option-radio::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--tg-accent);
+            border-radius: 50%;
+        }
+
+        .survey-actions {
+            margin-top: 24px;
+        }
+
+        .survey-actions .btn {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .survey-actions .btn.ready {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Result Page */
+        .result-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 104px);
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .result-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .result-text {
+            color: var(--tg-text-secondary);
+            margin-bottom: 32px;
+            font-size: 15px;
+        }
+
+        /* Roulette */
+        .roulette-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin: 32px 0;
+        }
+
+        .roulette-container.active {
+            display: flex;
+        }
+
+        .roulette-window {
+            width: 280px;
+            height: 120px;
+            background: var(--tg-secondary-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid var(--tg-accent);
+            box-shadow: 0 0 30px rgba(94, 170, 235, 0.3);
+        }
+
+        .roulette-indicator {
+            position: absolute;
+            top: 50%;
+            left: -10px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-left: 16px solid var(--gold);
+            z-index: 10;
+        }
+
+        .roulette-indicator-right {
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-right: 16px solid var(--gold);
+            z-index: 10;
+        }
+
+        .roulette-strip {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            left: 0;
+            right: 0;
+            transition: none;
+        }
+
+        .roulette-item {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .roulette-item .emoji {
+            font-size: 40px;
+        }
+
+        .roulette-center-line {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            right: 10px;
+            height: 2px;
+            background: rgba(255, 215, 0, 0.3);
+            transform: translateY(-50%);
+            z-index: 5;
+        }
+
+        /* Prize Reveal */
+        .prize-reveal {
+            display: none;
+            text-align: center;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .prize-reveal.active {
+            display: block;
+        }
+
+        .prize-big {
+            font-size: 80px;
+            margin-bottom: 16px;
+            animation: prizePulse 1s ease infinite;
+        }
+
+        @keyframes prizePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .prize-name {
+            font-size: 28px;
+            font-weight: 700;
+            background: var(--premium-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .prize-desc {
+            color: var(--tg-text-secondary);
+            margin-bottom: 32px;
+        }
+
+        /* Confetti */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Claim Page */
+        .claim-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 104px);
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .claim-check {
+            width: 80px;
+            height: 80px;
+            background: var(--tg-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 24px;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .claim-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .claim-text {
+            color: var(--tg-text-secondary);
+            margin-bottom: 32px;
+            max-width: 300px;
+            line-height: 1.5;
+        }
+
+        .claim-actions {
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--tg-accent);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(-10px) translateX(-10px); }
+            75% { transform: translateY(-30px) translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-logo">✈️</div>
+            <div class="header-title" id="headerTitle">Survey & Gifts</div>
+        </div>
+
+        <!-- Page 1: Welcome -->
+        <div class="page active" id="page-welcome">
+            <div class="particles" id="particles"></div>
+            <div class="welcome-content">
+                <div class="gift-icon">🎁</div>
+                <h1 class="welcome-title">Пройди опрос — получи подарок!</h1>
+                <p class="welcome-subtitle">Ответь на 7 простых вопросов и получи один из призов совершенно бесплатно</p>
+                
+                <div class="prizes-preview">
+                    <div class="prize-card">
+                        <span class="emoji">⭐</span>
+                        <div class="name">Telegram Stars</div>
+                        <div class="desc">Валюта Telegram</div>
+                    </div>
+                    <div class="prize-card">
+                        <span class="emoji">💎</span>
+                        <div class="name">Telegram Premium</div>
+                        <div class="desc">Подписка на 3 мес.</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-premium" onclick="showSurveyModal()">
+                    Перейти к опросу →
+                </button>
+            </div>
+        </div>
+
+        <!-- Page 2: Survey -->
+        <div class="page" id="page-survey">
+            <div class="survey-header">
+                <h2>📋 Опрос</h2>
+                <p>Осталось ответить на <span id="remainingQ">7</span> вопросов</p>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div id="questionsContainer"></div>
+            <div class="survey-actions">
+                <button class="btn" id="submitBtn" onclick="submitSurvey()">
+                    Отправить ответы
+                </button>
+            </div>
+        </div>
+
+        <!-- Page 3: Result / Roulette -->
+        <div class="page" id="page-result">
+            <div class="result-content" id="resultContent">
+                <div class="result-icon">🎉</div>
+                <h2 class="result-title">Опрос пройден!</h2>
+                <p class="result-text">Спасибо за ваши ответы. Теперь давайте узнаем ваш подарок!</p>
+                <button class="btn btn-premium" id="spinBtn" onclick="startRoulette()">
+                    🎰 Получить приз
+                </button>
+
+                <div class="roulette-container" id="rouletteContainer">
+                    <div class="roulette-window">
+                        <div class="roulette-indicator"></div>
+                        <div class="roulette-indicator-right"></div>
+                        <div class="roulette-center-line"></div>
+                        <div class="roulette-strip" id="rouletteStrip"></div>
+                    </div>
+                </div>
+
+                <div class="prize-reveal" id="prizeReveal">
+                    <div class="prize-big" id="prizeEmoji"></div>
+                    <div class="prize-name" id="prizeName"></div>
+                    <div class="prize-desc" id="prizeDesc"></div>
+                    <button class="btn btn-success" onclick="showClaimPage()">
+                        🎁 Получить подарок
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 4: Claim -->
+        <div class="page" id="page-claim">
+            <div class="claim-content">
+                <div class="claim-check">✓</div>
+                <h2 class="claim-title">Подарок готов!</h2>
+                <p class="claim-text">Ваш подарок успешно активирован. Нажмите кнопку ниже, чтобы получить его в Telegram.</p>
+                <div class="claim-actions">
+                    <button class="btn btn-premium" onclick="claimPrize()">
+                        Получить в Telegram
+                    </button>
+                    <button class="btn" onclick="window.location.reload()" style="background: var(--tg-input-bg);">
+                        Пройти ещё раз
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome Modal -->
+    <div class="modal-overlay" id="surveyModal">
+        <div class="modal">
+            <div class="modal-icon">🎯</div>
+            <div class="modal-title">Готовы начать?</div>
+            <div class="modal-text">Пройдите опрос из 7 простых вопросов и получите один из подарков на выбор!</div>
+            <button class="btn btn-premium" onclick="startSurvey()">
+                Начать опрос 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <script>
+        // Survey questions data
+        const questions = [
+            {
+                id: 1,
+                text: "Какое время суток вам нравится больше всего?",
+                options: ["🌅 Утро", "☀️ День", "🌆 Вечер", "🌙 Ночь"]
+            },
+            {
+                id: 2,
+                text: "Какой ваш любимый вид транспорта?",
+                options: ["🚗 Автомобиль", "✈️ Самолёт", "🚂 Поезд", "🚲 Велосипед"]
+            },
+            {
+                id: 3,
+                text: "Что вы предпочитаете делать в свободное время?",
+                options: ["📺 Смотреть фильмы", "🎮 Играть в игры", "📚 Читать книги", "🏃 Заниматься спортом"]
+            },
+            {
+                id: 4,
+                text: "Какую погоду вы любите больше?",
+                options: ["☀️ Солнечную", "🌧️ Дождливую", "❄️ Снежную", "🌤️ Прохладную"]
+            },
+            {
+                id: 5,
+                text: "Какой ваш любимый приём пищи?",
+                options: ["🥐 Завтрак", "🍱 Обед", "🍝 Ужин", "🍿 Перекусы"]
+            },
+            {
+                id: 6,
+                text: "Где бы вы хотели провести отпуск?",
+                options: ["🏖️ На море", "🏔️ В горах", "🏙️ В городе", "🏕️ На природе"]
+            },
+            {
+                id: 7,
+                text: "Какое животное вам нравится больше всего?",
+                options: ["🐱 Кошка", "🐶 Собака", "🐬 Дельфин", "🦅 Орёл"]
+            }
+        ];
+
+        // State
+        let answers = {};
+        let currentQuestion = 0;
+        let selectedPrize = null;
+
+        // Prizes configuration - weighted random
+        const prizes = [
+            { 
+                emoji: "⭐", 
+                name: "500 Telegram Stars", 
+                desc: "Виртуальная валюта Telegram", 
+                weight: 60 
+            },
+            { 
+                emoji: "💎", 
+                name: "Telegram Premium", 
+                desc: "Подписка на 3 месяца", 
+                weight: 40 
+            }
+        ];
+
+        // Initialize particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            if (!container) return;
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (4 + Math.random() * 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Show modal
+        function showSurveyModal() {
+            document.getElementById('surveyModal').classList.add('active');
+        }
+
+        // Close modal and start survey
+        function startSurvey() {
+            document.getElementById('surveyModal').classList.remove('active');
+            showPage('page-survey');
+            document.getElementById('headerTitle').textContent = 'Опрос';
+            renderQuestions();
+            updateProgress();
+        }
+
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Render all questions
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.innerHTML = `
+                    <div class="question-number">Вопрос ${q.id} из ${questions.length}</div>
+                    <div class="question-text">${q.text}</div>
+                    <div class="options" data-question="${q.id}">
+                        ${q.options.map((opt, i) => `
+                            <div class="option" onclick="selectOption(${q.id}, ${i}, this)">
+                                <div class="option-radio"></div>
+                                <span>${opt}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Select option
+        function selectOption(questionId, optionIndex, element) {
+            answers[questionId] = optionIndex;
+            
+            // Update visual
+            const container = element.parentElement;
+            container.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            // Update progress
+            updateProgress();
+            
+            // Enable submit if all answered
+            if (Object.keys(answers).length === questions.length) {
+                document.getElementById('submitBtn').classList.add('ready');
+            }
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const answered = Object.keys(answers).length;
+            const pct = (answered / questions.length) * 100;
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('remainingQ').textContent = questions.length - answered;
+        }
+
+        // Submit survey
+        function submitSurvey() {
+            if (Object.keys(answers).length < questions.length) return;
+            
+            showPage('page-result');
+            document.getElementById('headerTitle').textContent = 'Результат';
+        }
+
+        // Weighted random prize selection
+        function selectWeightedPrize() {
+            const totalWeight = prizes.reduce((sum, p) => sum + p.weight, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (const prize of prizes) {
+                random -= prize.weight;
+                if (random <= 0) return prize;
+            }
+            return prizes[prizes.length - 1];
+        }
+
+        // Start roulette
+        function startRoulette() {
+            selectedPrize = selectWeightedPrize();
+            
+            const container = document.getElementById('rouletteContainer');
+            const strip = document.getElementById('rouletteStrip');
+            const spinBtn = document.getElementById('spinBtn');
+            
+            spinBtn.style.display = 'none';
+            container.classList.add('active');
+            
+            // Build strip: many items ending with selected prize
+            const totalItems = 30;
+            const prizeIndex = totalItems - 3; // prize lands at this position
+            
+            let html = '';
+            for (let i = 0; i < totalItems; i++) {
+                let prize;
+                if (i === prizeIndex) {
+                    prize = selectedPrize;
+                } else {
+                    // Alternate between prizes
+                    prize = prizes[i % prizes.length];
+                }
+                html += `
+                    <div class="roulette-item" data-index="${i}">
+                        <span class="emoji">${prize.emoji}</span>
+                        <span>${prize.name}</span>
+                    </div>
+                `;
+            }
+            strip.innerHTML = html;
+            
+            // Animate
+            const itemHeight = 120;
+            const targetOffset = -(prizeIndex * itemHeight) + (120 / 2) - (itemHeight / 2);
+            
+            // Reset position
+            strip.style.transition = 'none';
+            strip.style.transform = 'translateY(0)';
+            
+            // Force reflow
+            strip.offsetHeight;
+            
+            // Start spinning
+            setTimeout(() => {
+                strip.style.transition = 'transform 4s cubic-bezier(0.15, 0.8, 0.3, 1)';
+                strip.style.transform = `translateY(${targetOffset}px)`;
+            }, 50);
+            
+            // Show result after animation
+            setTimeout(() => {
+                showPrizeReveal();
+            }, 4500);
+        }
+
+        // Show prize reveal
+        function showPrizeReveal() {
+            document.getElementById('rouletteContainer').classList.remove('active');
+            const reveal = document.getElementById('prizeReveal');
+            reveal.classList.add('active');
+            
+            document.getElementById('prizeEmoji').textContent = selectedPrize.emoji;
+            document.getElementById('prizeName').textContent = selectedPrize.name;
+            document.getElementById('prizeDesc').textContent = selectedPrize.desc;
+            
+            // Confetti!
+            launchConfetti();
+        }
+
+        // Confetti
+        function launchConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#A29BFE', '#FD79A8'];
+            
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    confetti.style.width = (6 + Math.random() * 8) + 'px';
+                    confetti.style.height = (6 + Math.random() * 8) + 'px';
+                    confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                    container.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        // Show claim page
+        function showClaimPage() {
+            showPage('page-claim');
+            document.getElementById('headerTitle').textContent = 'Получение подарка';
+            launchConfetti();
+        }
+
+        // Claim prize (redirect to Telegram)
+        function claimPrize() {
+            // Open Telegram
+            window.open('https://t.me/', '_blank');
+        }
+
+        // Init
+        createParticles();
+    </script>
+</body>
+</html>
